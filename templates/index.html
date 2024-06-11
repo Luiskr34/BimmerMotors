@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BimmerMotors</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f8ff;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        header {
+            background-color: #1e3d59;
+            color: #fff;
+            padding: 1rem;
+            text-align: center;
+            position: relative;
+        }
+
+        header img {
+            height: 50px;
+        }
+
+        header nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        header nav ul li {
+            display: inline;
+            margin: 0 10px;
+        }
+
+        header nav ul li a {
+            color: #fff;
+            text-decoration: none;
+        }
+
+        .auth-buttons {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+
+        .auth-buttons a {
+            color: #fff;
+            background-color: #1e3d59;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-left: 10px;
+        }
+
+        .user-info {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            color: #fff;
+        }
+
+        main {
+            padding: 1rem;
+            flex: 1;
+            padding-bottom: 70px; /* Espaço suficiente para o rodapé */
+        }
+
+        .car-list {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+        }
+
+        .car {
+            background: #fff;
+            border: 1px solid #ddd;
+            margin: 10px;
+            padding: 10px;
+            width: calc(30% - 20px);
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .car img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        .car-actions {
+            margin-top: 10px;
+        }
+
+        .car-actions a, .car-actions form {
+            display: inline-block;
+            margin-right: 10px;
+        }
+
+        .suggestion-button {
+            display: block;
+            width: 200px;
+            margin: 20px auto;
+            padding: 10px;
+            background-color: #1e3d59;
+            color: #fff;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+
+        .suggestion-button:hover {
+            background-color: #3a4e70;
+        }
+
+        footer {
+            background-color: #1e3d59;
+            color: #fff;
+            text-align: center;
+            padding: 1rem;
+            position: relative;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <img src="https://w7.pngwing.com/pngs/468/92/png-transparent-blue-bmw-car-2017-bmw-m2-bmw-2-series-car-bmw-5-series-blue-bmw-m2-coupe-car-compact-car-sedan-performance-car.png" alt="BimmerMotors Logo">
+        <h1>BimmerMotors</h1>
+        <nav>
+            <ul>
+                <li><a href="/">Início</a></li>
+                <li><a href="/sobre">Sobre</a></li>
+                <li><a href="/cadastrar">Cadastrar Carro</a></li>
+            </ul>
+        </nav>
+        <div class="auth-buttons">
+            <a href="/login">Login</a>
+            <a href="/usuario">Cadastrar</a>
+            <a href="/logout">Logout</a>
+        </div>
+        {% if session['username'] %}
+        <div class="user-info">
+            <p>Bem-vindo, {{ session['username'] }}!</p>
+        </div>
+        {% endif %}
+    </header>
+    <main>
+        <section>
+            <h2>Carros de Luxo</h2>
+            <p>Encontre os melhores carros aqui.</p>
+            <a href="/recomendar" class="suggestion-button">Quer uma sugestão de um carro? Clique aqui</a>
+        </section>
+        <section>
+            <h2>Nossos Destaques</h2>
+            <div class="car-list">
+                {% for carro in carros %}
+                <div class="car">
+                    <h3>{{ carro.modelo }}</h3>
+                    <img src="{{ carro.image }}" alt="{{ carro.modelo }}">
+                    <p>Nome do Vendedor: {{ carro.vendedor }}</p>
+                    <p>Preço: {{ "{:,.2f}".format(carro.preco).replace(',', 'X').replace('.', ',').replace('X', '.') }}<br>
+                    <p>Ano: {{ carro.ano }}</p>
+                    <p>Motorização: {{ carro.motorizacao }}</p>
+                    <p>Potência: {{ carro.potencia }} cv</p>
+                    <p>Cor: {{ carro.cor }}</p>
+                    <p>Contato: {{ carro.contato }}</p>
+                    <div class="car-actions">
+                        <a href="{{ url_for('editar', id=carro.id) }}">Editar</a>
+                        <form action="{{ url_for('excluir', id=carro.id) }}" method="post" style="display:inline;">
+                            <button type="submit">Excluir</button>
+                        </form>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2024 BimmerMotors. Todos os direitos reservados.</p>
+    </footer>
+</body>
+</html>
