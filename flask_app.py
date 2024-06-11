@@ -248,7 +248,7 @@ def addUsuario():
         usuario = Usuario(nome=nome, senha=senha)
         db.session.add(usuario)
         db.session.commit()
-        return redirect(url_for('login'))  # Redireciona para a página de login após o cadastro
+        return redirect(url_for('login'))
 
     add_usuario_html = """
     <title>Adicionar Usuário</title>
@@ -320,7 +320,7 @@ def recomendar():
 
         return render_template('recomendar.html', resposta=resposta)
 
-    # Se a solicitação for GET, renderizar a página de recomendação sem resposta
+
     return render_template('recomendar.html')
 
 
